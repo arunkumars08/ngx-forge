@@ -74,7 +74,7 @@ gulp.task('post-transpile', ['transpile'], function () {
 
 // Transpile and minify less, storing results in libraryDist.
 gulp.task('transpile-less', function () {
-  return transpileLESS(appSrc + '/**/*.less');
+  return transpileLESS(appSrc + '/**/**/*.less');
 });
 
 // transpiles the ts sources to js using the tsconfig.

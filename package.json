@@ -133,6 +133,7 @@
     "mocha": "3.2.0",
     "npm-run-all": "4.0.2",
     "optimize-js-plugin": "0.0.4",
+    "patternfly": "^3.29.11",
     "phantomjs-prebuilt": "2.1.14",
     "protractor": "5.1.1",
     "raw-loader": "0.5.1",

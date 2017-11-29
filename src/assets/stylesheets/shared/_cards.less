@@ -1,0 +1,95 @@
+// -- Cards --
+.f8 {
+  &-card {
+    height: 440px;
+    &__activity {
+      max-height: 300px;
+    }
+    &-body {
+      margin-top: 0;
+      padding-bottom: 0;
+      // height: 375px;
+      // overflow-y: auto;
+      overflow-x: hidden;
+      .list-group { padding-bottom: 0; }
+      .list-view-pf-view { margin-top: -1px; }
+    }
+    &-heading {
+      // margin-right: 0;
+      margin-bottom: 0;
+      // margin-left: 0;
+      &-btn {
+        &-link {
+          display: inline-flex;
+          &:hover {
+            text-decoration: none;
+          }
+        }
+        &-kebab {
+          display: inline-flex;
+          /* stylelint-disable */
+          /* overwrite default button link style for kebab items */
+          color: @color-pf-black !important;
+          /* stylelint-enable */
+          &:hover {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+    &-list {
+      padding: 0;
+      .list-group-item {
+        margin-left: -2px;
+        &-heading {
+          font-size: @font-size-base;
+        }
+      }
+    }
+    &-footer { height: 70px; }
+    &__pipeline-column {
+      .truncate;
+      &-name,
+      &-build {
+        padding-left: 10px;
+      }
+      &-start { .truncate; }
+      &-status { .truncate; }
+    }
+  }
+  &-blank-slate {
+    &-card {
+      margin-top: 25px;
+      text-align: center;
+      p {
+        margin-bottom: 20px;
+        margin-top: 20px;
+        &:first-child { margin-top: -20px; }
+        &:last-child { margin-top: 40px; }
+      }
+    }
+    &__activity {
+       text-align: center;
+    }
+    &-icon { font-size: 1.5em; }
+    &-main-action { margin-top: 20px; }
+  }
+  &-list-group-item {
+    &-icon {
+      padding-top: 0;
+      padding-right: 10px;
+    }
+    &-link {
+      padding-left: 10px;
+    }
+  }
+}
+/* creates an alternating row stripe for lists
+ * similar to how tables use the .table-striped class
+ */
+.list-view-pf-striped .list-group-item:nth-of-type(2n) {
+  background-color: @color-pf-black-150;
+  &:hover {
+    background-color: #edf8ff;
+  }
+}
