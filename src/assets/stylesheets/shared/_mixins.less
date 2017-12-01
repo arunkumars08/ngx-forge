@@ -1,4 +1,7 @@
-@import (reference) '../../../../node_modules/patternfly/node_modules/bootstrap/less/mixins.less';
+// @import (reference) '../../../../node_modules/patternfly/node_modules/bootstrap/less/mixins.less';
+// @import (reference) '../../../../node_modules/patternfly/node_modules/bootstrap/less/variables.less';
+@import (reference) 'main.less';
+
 .transform(@transform) {
   -webkit-transform: @transform;
      -moz-transform: @transform;
@@ -39,6 +42,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.truncate { .truncate; }
 .multiline-truncate(@line-height, @line-count, @bg-color) {
   position: relative;
   overflow: hidden;
@@ -63,3 +67,15 @@
     content: '';
   }
 }
+@media (max-width: @grid-float-breakpoint) {
+  .mobdn { display: none; }
+  .list-view-pf {
+    .list-group-item-heading { font-size: em(12); }
+  }
+}
+@media (max-width: (@grid-float-breakpoint - 1)) {
+  .containerPadd { padding-top: em(11); }
+  .containerPadd-nologin { padding-bottom: 0; }
+}
+.containerPadd { padding: em(96) 0 em(66) 0; }
+.containerPadd-nologin { padding-bottom: 0; }

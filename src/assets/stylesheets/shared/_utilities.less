@@ -1,9 +1,7 @@
-/*
-  Styles relating to general html document
-*/
+@import (reference) 'main.less';
+
 .view-container {
   position: relative;
-  @content-padding: 0;
   >.view {
     &:extend(.fill-container);
     &.with-rows {
@@ -16,35 +14,27 @@
       padding: @content-padding;
       overflow: auto;
     }
+    >.view-content {
+      position: relative;
+      padding-top: @content-padding;
+    }
   }
 }
-.user-select-none {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-   -khtml-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-       -o-user-select: none;
-          user-select: none;
+.dropdown {
+  a {
+    color: @color-pf-white;
+    &:hover {
+      text-decoration: none;
+    }
+  }
 }
-
+.btn { min-width: 90px; }
+//remove toolbar box shadow
 /* stylelint-disable */
-/* do not include these patterns due to required use of !important */
-.create-padding-x-standard-offset() {
-  .padding-standard-offset { padding: @grid-gutter-width/2 !important; }
-  .padding-top-standard-offset { padding-top: @grid-gutter-width/2 !important; }
-  .padding-left-standard-offset { padding-left: @grid-gutter-width/2 !important; }
-  .padding-right-standard-offset { padding-right: @grid-gutter-width/2 !important; }
-  .padding-bottom-standard-offset { padding-bottom: @grid-gutter-width/2 !important; }
-}
-.create-margin-x-standard-offset() {
-  .margin-standard-spacing { margin: @grid-gutter-width/2 !important; }
-  .margin-top-standard-offset { margin-top: @grid-gutter-width/2 !important; }
-  .margin-left-standard-offset { margin-left: @grid-gutter-width/2 !important; }
-  .margin-right-standard-offset { margin-right: @grid-gutter-width/2 !important; }
-  .margin-bottom-standard-offset { margin-bottom: @grid-gutter-width/2 !important; }
-}
+.toolbar-pf { box-shadow: none !important; }
 /* stylelint-enable */
-
-@include: create-margin-x-standard-offset();
-@include: create-padding-x-standard-offset();
+// add border top to filter results
+.toolbar-pf-results {
+  border-top : 1px solid;
+  border-top-color: @color-pf-black-300;
+}
