@@ -16,6 +16,9 @@ export class DemoMissionRuntimeService implements MissionRuntimeService {
         "name": "CRUD",
         "suggested": false,
         "runtimes": [
+            "vert.x",
+            "nodejs",
+            "wildfly-swarm"
         ]
     },
     {
