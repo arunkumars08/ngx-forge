@@ -3,6 +3,7 @@ import {
   Component,
   OnInit,
   ViewChild,
+  ChangeDetectionStrategy,
   ViewEncapsulation
 } from '@angular/core';
 import { Router } from '@angular/router';
@@ -15,6 +16,7 @@ import { WizardStep } from './wizard-step';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'f8launcher-wizard',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './wizard.component.html',
   styleUrls: ['./wizard.component.less']
 })
@@ -61,7 +63,7 @@ export class WizardComponent implements AfterViewInit, OnInit {
    */
   get selection(): Selection {
     let selection = {
-      missionId: this._summary.mission.missionId,
+      missionId: this._summary.mission.id,
       runtimeId: this._summary.runtime.runtimeId,
       runtimeVersion: this._summary.runtime.version
     } as Selection;

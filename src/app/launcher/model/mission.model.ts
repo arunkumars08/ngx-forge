@@ -1,7 +1,9 @@
 export class Mission {
-  missionId: string;
-  suggested?: boolean;
-  title: string;
-  description: string;
-  supportedRuntimes: string[];
+  constructor(
+    public id: string,
+    public name: string,
+    public suggested: boolean,
+    public runtimes: string[],
+    public description: string = null
+  ) {}
 }
