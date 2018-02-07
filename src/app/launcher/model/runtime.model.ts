@@ -1,5 +1,5 @@
 export class Runtime {
-  runtimeId: string;
+  id: string;
   name: string;
   description: string;
   icon: string;
