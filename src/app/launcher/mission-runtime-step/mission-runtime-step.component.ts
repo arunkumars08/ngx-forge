@@ -107,6 +107,10 @@ export class MissionRuntimeStepComponent extends WizardStep implements OnInit, O
     this.runtimeId = undefined;
     this.wizardComponent.summary.mission = undefined;
     this.wizardComponent.summary.runtime = undefined;
+
+    // Resetting the disabled things
+    this.selectedMission =  null;
+    this.selectedRuntime = null;
   }
 
   // Private
