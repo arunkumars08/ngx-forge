@@ -26,6 +26,8 @@ export class MissionRuntimeStepComponent extends WizardStep implements OnInit, O
   private _missions: Mission[];
   private _runtimes: Runtime[];
 
+  public selectedRuntime: Runtime;
+
   private missionId: string;
   private runtimeId: string;
   private subscriptions: Subscription[] = [];
@@ -136,6 +138,7 @@ export class MissionRuntimeStepComponent extends WizardStep implements OnInit, O
   }
 
   private updateRuntimeSelection(val: Runtime): void {
+    this.selectedRuntime = val;
     this.wizardComponent.summary.runtime = val;
     this.wizardComponent.summary.runtime.projectVersion = (val.projectVersion !== undefined) ? val.projectVersion : val.projectVersions[0];
   }
