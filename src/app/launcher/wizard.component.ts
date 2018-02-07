@@ -62,10 +62,9 @@ export class WizardComponent implements AfterViewInit, OnInit {
    * @returns {Selection} The current selection
    */
   get selection(): Selection {
-    debugger;
     let selection = {
       missionId: this._summary.mission.id,
-      runtimeId: this._summary.runtime.runtimeId,
+      runtimeId: this._summary.runtime.id,
       runtimeVersion: this._summary.runtime.projectVersion
     } as Selection;
     return selection;
