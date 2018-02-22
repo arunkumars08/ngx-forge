@@ -24,7 +24,7 @@ import { DemoTargetEnvironmentService } from './service/demo-target-environment.
 
 import { Config } from '../app/service/config.component';
 import { ForgeConfig } from './shared/forge-config';
-import { FABRIC8_FORGE_API_URL } from './shared/forge-api-url';
+import { FABRIC8_FORGE_API_NEW_FLOW_URL } from './shared/forge-api-url';
 import { FABRIC8_ORIGIN } from './shared/forge-origin';
 
 import { TokenProvider } from '../app/service/token-provider';
@@ -67,7 +67,7 @@ import {
     { provide: ProjectSummaryService, useClass: DemoProjectSummaryService },
     { provide: TargetEnvironmentService, useClass: DemoTargetEnvironmentService},
     { provide: Config, useClass: ForgeConfig },
-    { provide: FABRIC8_FORGE_API_URL, useValue: 'https://forge.api.prod-preview.openshift.io' },
+    { provide: FABRIC8_FORGE_API_NEW_FLOW_URL, useValue: 'https://forge.api.prod-preview.openshift.io' },
     { provide: FABRIC8_ORIGIN, useValue: 'osio' },
     { provide: TokenProvider, useClass: MockAuthenticationService }
   ],

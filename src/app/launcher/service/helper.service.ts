@@ -8,6 +8,7 @@ export class HelperService  {
 
     private keys: any = {
         BACKEND: 'backend_url',
+        STAGE_BACKEND: 'backend_stage',
         ORIGIN: 'origin'
     };
 
@@ -15,9 +16,9 @@ export class HelperService  {
         private config: Config
     ) {}
 
-    getBackendUrl(): string {
+    getBackendUrl(stage: boolean = false): string {
         if (this.config) {
-            return this.config.get(this.keys.BACKEND);
+            return stage ? this.config.get(this.keys['STAGE_BACKEND']) : this.config.get(this.keys.BACKEND);
         }
         return null;
     }
