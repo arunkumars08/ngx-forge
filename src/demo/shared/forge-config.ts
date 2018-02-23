@@ -11,7 +11,7 @@ export class ForgeConfig extends Config {
 
   constructor(@Inject(FABRIC8_FORGE_API_NEW_FLOW_URL) private apiUrl: string, @Inject(FABRIC8_ORIGIN) private origin: string) {
     super();
-    let settings = {
+    let settings: any = {
       backend_url: '',
       origin: ''
     };

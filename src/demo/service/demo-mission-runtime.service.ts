@@ -23,7 +23,7 @@ export class DemoMissionRuntimeService implements MissionRuntimeService {
     private tokenProvider: TokenProvider
   ) {
     if (this.helperService) {
-      this.END_POINT = this.helperService.getBackendUrl();
+      this.END_POINT = this.helperService.getBackendUrl(true);
       this.ORIGIN = this.helperService.getOrigin();
     }
   }
