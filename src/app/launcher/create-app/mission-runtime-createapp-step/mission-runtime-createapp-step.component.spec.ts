@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, fakeAsync, ComponentFixture, TestBed, tick } from '@angular/core/testing';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,7 +20,7 @@ let mockMissionRuntimeService = {
     let missions = Observable.of( [{
       id: 'crud',
       name: 'CRUD',
-      suggested: false,
+      suggested: true,
       description : 'sample desp',
       runtimes: [
       'vert.x',
@@ -32,7 +32,7 @@ let mockMissionRuntimeService = {
       return missions;
   },
   getRuntimes(): Observable<Runtime[]> {
-    let runtimes = Observable.of( [<Runtime>{
+    let runtimes = Observable.of( [<Runtime> {
       'id': 'vert.x',
       'name': 'Eclipse Vert.x',
       'description': 'Brief description of the technology...',
@@ -49,8 +49,7 @@ let mockMissionRuntimeService = {
               'name': '3.5.0.Final (Community)'
             }
           ]
-        }],
-      'url': 'https://github.com/fabric8-launcher/ngx-launcher'
+        }]
     }]);
     return runtimes;
   }
@@ -73,18 +72,19 @@ let mockWizardComponent: TypeWizardComponent = {
   },
   summaryCompleted: false,
   addStep(step: LauncherStep) {
-    for (let i = 0; i < this.steps.length; i++) {
-      if (step.id === this.steps[i].id) {
-        return;
+      for (let i = 0; i < this.steps.length; i++) {
+        if (step.id === this.steps[i].id) {
+          return;
+        }
       }
+      this.steps.push(step);
     }
-    this.steps.push(step);
-  }
-};
+  };
 
 describe('MissionRuntimeStepComponent', () => {
   let component: MissionRuntimeCreateappStepComponent;
   let fixture: ComponentFixture<MissionRuntimeCreateappStepComponent>;
+  let element: HTMLElement;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -119,5 +119,229 @@ describe('MissionRuntimeStepComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  // Missions tests
+  beforeEach(() => {
+    component.ngOnInit();
+    fixture.detectChanges();
+  });
+
+  it('to have count of missions to be 1', () => {
+    let missionsList = component.missions;
+    expect(missionsList.length).toBe(1);
+  });
+
+  it('should have 1 entry for mission created', () => {
+    element = fixture.nativeElement;
+    let missionsSection = element.querySelectorAll('.card-pf-body')[0];
+    expect(missionsSection.children.length).toBe(1);
+  });
+
+  it('should have the class selected-list-item added to the list group item on click of radio button of mission', fakeAsync(() => {
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let missionsSection = element.querySelectorAll('.card-pf-body')[0];
+    let missionGroupItem = missionsSection.querySelector('.list-group-item');
+    let radioBtn = <HTMLInputElement>missionGroupItem.querySelector('input[type="radio"]');
+    let beforeChange = missionGroupItem.classList.contains('selected-list-item');
+    radioBtn.click();
+    tick();
+    fixture.detectChanges();
+    expect(beforeChange === false && missionGroupItem.classList.contains('selected-list-item') === true).toBeTruthy();
+  }));
+
+  it('should update the selected mission in launcher component', fakeAsync(() => {
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let missionsSection = element.querySelectorAll('.card-pf-body')[0];
+    let missionGroupItem = missionsSection.querySelector('.list-group-item');
+    let radioBtn = <HTMLInputElement>missionGroupItem.querySelector('input[type="radio"]');
+    let beforeChange = missionGroupItem.classList.contains('selected-list-item');
+    radioBtn.click();
+    tick();
+    fixture.detectChanges();
+    expect(component.launcherComponent.summary.mission).toBe(component.missions[0]);
+  }));
+
+  it('should have the suggested missions tag when mission.suggested field is true', () => {
+    element = fixture.nativeElement;
+    let missionsSection = element.querySelectorAll('.card-pf-body')[0];
+    let featuredTag = missionsSection.querySelector('.f8launcher-tag-featured');
+    expect(featuredTag).toBeDefined();
+  });
+
+  it('should not have the suggested missions tag when mission.suggested field is false', () => {
+    component.missions[0].suggested = false;
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let missionsSection = element.querySelectorAll('.card-pf-body')[0];
+    let featuredTag = missionsSection.querySelector('.f8launcher-tag-featured');
+    expect(featuredTag).toBeNull();
+  });
+
+  it('should have the mission name as specified', () => {
+    element = fixture.nativeElement;
+    let missionsSection = element.querySelectorAll('.card-pf-body')[0];
+    let missionHead = missionsSection.querySelectorAll('.list-group-item-heading');
+    let missions = component.missions, len = missions.length;
+    for (let i = 0; i < len; ++ i) {
+      expect((<HTMLDivElement>missionHead[i]).innerText).toBe(missions[i].name);
+    }
+  });
+
+  it('should have the mission description as specified', () => {
+    element = fixture.nativeElement;
+    let missionsSection = element.querySelectorAll('.card-pf-body')[0];
+    let missionHead = missionsSection.querySelectorAll('.list-group-item-text');
+    let missions = component.missions, len = missions.length;
+    for (let i = 0; i < len; ++ i) {
+      expect((<HTMLDivElement>missionHead[i]).innerText).toBe(missions[i].description);
+    }
+  });
+
+  it('should show more if the url is present', () => {
+    component.missions[0].url = 'https://github.com/fabric8-launcher/ngx-launcher/';
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let missionsSection = element.querySelectorAll('.card-pf-body')[0];
+    let showMore = missionsSection.querySelector('a');
+    expect(showMore).toBeDefined();
+  });
+
+  it('should have the mission.url as href', () => {
+    component.missions[0].url = 'https://github.com/fabric8-launcher/ngx-launcher/';
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let missionsSection = element.querySelectorAll('.card-pf-body')[0];
+    let showMore = <HTMLAnchorElement>missionsSection.querySelector('a');
+    expect(showMore.href).toBe('https://github.com/fabric8-launcher/ngx-launcher/');
+  });
+
+  it('should not show more if the url is not present', () => {
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let missionsSection = element.querySelectorAll('.card-pf-body')[0];
+    let showMore = missionsSection.querySelector('a');
+    expect(showMore).toBeNull();
+  });
+
+  it('should disable the runtimes, on click of mission, which aren\'t applicable', fakeAsync(() => {
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let missionsSection = element.querySelectorAll('.card-pf-body')[0];
+    let missionGroupItem = missionsSection.querySelector('.list-group-item');
+    let radioBtn = <HTMLInputElement>missionGroupItem.querySelector('input[type="radio"]');
+    let beforeChange = missionGroupItem.classList.contains('selected-list-item');
+    radioBtn.click();
+    tick();
+    fixture.detectChanges();
+    component.launcherComponent.summary.mission.runtimes.splice(0, 1);
+    fixture.detectChanges();
+    let selectedMission = component.launcherComponent.summary.mission;
+    expect(component.isRuntimeDisabled(component.runtimes[0])).toBeTruthy();
+  }));
+
+
+
+  // Runtimes tests
+
+  it('to have count of runtimes to be 1', () => {
+    let runtimesList = component.runtimes;
+    expect(runtimesList.length).toBe(1);
+  });
+
+  it('should have 1 entry for runtimes created', () => {
+    element = fixture.nativeElement;
+    let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
+    expect(runtimesSection.children.length).toBe(1);
+  });
+
+  it('should have the class selected-list-item added to the list group item on click of radio button of runtime', fakeAsync(() => {
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
+    let runtimeGroupItem = runtimesSection.querySelector('.list-group-item');
+    let radioBtn = <HTMLInputElement>runtimeGroupItem.querySelector('input[type="radio"]');
+    let beforeChange = runtimeGroupItem.classList.contains('selected-list-item');
+    radioBtn.click();
+    tick();
+    fixture.detectChanges();
+    expect(beforeChange === false && runtimeGroupItem.classList.contains('selected-list-item') === true).toBeTruthy();
+  }));
+
+  it('should update the selected runtime in launcher component', fakeAsync(() => {
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
+    let runtimeGroupItem = runtimesSection.querySelector('.list-group-item');
+    let radioBtn = <HTMLInputElement>runtimeGroupItem.querySelector('input[type="radio"]');
+    let beforeChange = runtimeGroupItem.classList.contains('selected-list-item');
+    radioBtn.click();
+    tick();
+    fixture.detectChanges();
+    expect(component.launcherComponent.summary.runtime).toBe(component.runtimes[0]);
+  }));
+
+  it('should have the suggested runtimes tag when runtime.suggested field is true', () => {
+    element = fixture.nativeElement;
+    let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
+    let featuredTag = runtimesSection.querySelector('.f8launcher-tag-featured');
+    expect(featuredTag).toBeDefined();
+  });
+
+  it('should not have the suggested runtimes tag when runtime.suggested field is false', () => {
+    component.missions[0].suggested = false;
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
+    let featuredTag = runtimesSection.querySelector('.f8launcher-tag-featured');
+    expect(featuredTag).toBeNull();
+  });
+
+  it('should have the runtime name as specified', () => {
+    element = fixture.nativeElement;
+    let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
+    let runtimesHead = runtimesSection.querySelectorAll('.list-group-item-heading');
+    let runtimes = component.runtimes, len = runtimes.length;
+    for (let i = 0; i < len; ++ i) {
+      expect((<HTMLDivElement>runtimesHead[i]).innerText).toBe(runtimes[i].name);
+    }
+  });
+
+  it('should have the runtime description as specified', () => {
+    element = fixture.nativeElement;
+    let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
+    let runtimesHead = runtimesSection.querySelectorAll('.list-group-item-text');
+    let runtimes = component.runtimes, len = runtimes.length;
+    for (let i = 0; i < len; ++ i) {
+      expect((<HTMLDivElement>runtimesHead[i]).innerText).toBe(runtimes[i].description);
+    }
+  });
+
+  it('should show more if the url is present', () => {
+    component.runtimes[0].url = 'https://github.com/fabric8-launcher/ngx-launcher/';
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
+    let showMore = runtimesSection.querySelector('a');
+    expect(showMore).toBeDefined();
+  });
+
+  it('should have the runtime.url as href', () => {
+    component.runtimes[0].url = 'https://github.com/fabric8-launcher/ngx-launcher/';
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
+    let showMore = <HTMLAnchorElement>runtimesSection.querySelector('a');
+    expect(showMore.href).toBe('https://github.com/fabric8-launcher/ngx-launcher/');
+  });
+
+  it('should not show more if the url is not present', () => {
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
+    let showMore = runtimesSection.querySelector('a');
+    expect(showMore).toBeNull();
   });
 });
