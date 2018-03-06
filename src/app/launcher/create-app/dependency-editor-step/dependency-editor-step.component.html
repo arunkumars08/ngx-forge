@@ -2,19 +2,15 @@
          [ngClass]="{'hidden': hidden}">
   <div>
     <div class="container-fluid">
-      <h1 snInViewport (onInViewportChange)="launcherComponent.onInViewportChange($event, 'DependencyCheck')"
-          [debounce]="500">
-          Select Target Environment
+      <h1 snInViewport (onInViewportChange)="launcherComponent.onInViewportChange($event, 'DependencyCheck')">
+          Dependency Editor
         </h1>
-      <p>
-        Choose the environment where the application will be deployed.
-      </p>
     </div>
   </div>
   <div>
     <div class="container-fluid container-cards-pf">
       <div class="row row-cards-pf">
-        Here goes dep editor
+        <app-dependency-editor [boosterInfo]="boosterInfo && boosterInfo" [git]="github && github"></app-dependency-editor>
       </div>
     </div>
   </div>

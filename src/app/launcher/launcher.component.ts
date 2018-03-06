@@ -72,6 +72,7 @@ export class LauncherComponent implements AfterViewInit, OnInit {
 
   onInViewportChange($event: any, id: string) {
     if ($event) {
+      debugger;
       setTimeout(() => {
         this._selectedSection = id;
       }, 10); // Avoids ExpressionChangedAfterItHasBeenCheckedError

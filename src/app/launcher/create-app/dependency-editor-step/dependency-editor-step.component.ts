@@ -8,6 +8,8 @@ import {
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs/Subscription';
 
+import { DependencyCheckService } from '../../service/dependency-check.service';
+
 import { Selection } from '../../model/selection.model';
 import { TargetEnvironment } from '../../model/target-environment.model';
 import { TargetEnvironmentService } from '../../service/target-environment.service';
@@ -23,11 +25,14 @@ import { LauncherStep } from '../../launcher-step';
 export class DependencyEditorCreateappStepComponent extends LauncherStep implements OnDestroy {
   @Input() id: string;
 
+  public github: string = '';
+  public boosterInfo: any;
+
   private subscriptions: Subscription[] = [];
   private _targetEnvironments: TargetEnvironment[];
 
   constructor(@Host() public launcherComponent: LauncherComponent,
-              private targetEnvironmentService: TargetEnvironmentService,
+              private depCheckService: DependencyCheckService,
               public _DomSanitizer: DomSanitizer) {
     super();
   }
@@ -38,9 +43,37 @@ export class DependencyEditorCreateappStepComponent extends LauncherStep impleme
     });
   }
 
+  getGithubInformation(missionId: string, runtimeId: string, version: string = 'redhat'): void {
+    this.depCheckService.getGithubInformation(
+      missionId,
+      runtimeId,
+      version
+    ).subscribe((result) => {
+      this.github = result && result.gitRepo;
+    });
+  }
+
   ngOnInit() {
     this.launcherComponent.addStep(this);
+    console.log('Inside dep editor component');
     setTimeout(() => {
+      this.boosterInfo = {
+        mission: {
+          id: this.launcherComponent.summary.mission.id,
+          name: this.launcherComponent.summary.mission.name
+        },
+        runtime: {
+          id: this.launcherComponent.summary.runtime.id,
+          name: this.launcherComponent.summary.runtime.name,
+          version: this.launcherComponent.summary.runtime.version,
+          projectVersion: this.launcherComponent.summary.runtime.projectVersion,
+          icon: this.launcherComponent.summary.runtime.icon
+        }
+      };
+      this.getGithubInformation(
+        this.launcherComponent.summary.mission.id,
+        this.launcherComponent.summary.runtime.id
+      );
       this.restoreSummary();
     }, 10); // Avoids ExpressionChangedAfterItHasBeenCheckedError
 

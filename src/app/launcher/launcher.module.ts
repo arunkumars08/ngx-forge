@@ -2,10 +2,11 @@ import { NgModule, Provider } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+import { DependencyEditorModule } from 'fabric8-analytics-dep-editor';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap';
 import { ToolbarModule } from 'patternfly-ng';
 
-// Note: This has to be imported first
+// Note: This has to be imported firsts
 import { StepIndicatorComponent } from './step-indicator/step-indicator.component';
 import { CancelOverlayComponent } from './cancel-overlay/cancel-overlay.component';
 
@@ -51,6 +52,7 @@ export const providers: Provider[] = [
   imports: [
     BsDropdownModule.forRoot(),
     CommonModule,
+    DependencyEditorModule,
     FormsModule,
     InViewportModule.forRoot(providers),
     ToolbarModule
