@@ -24,6 +24,7 @@ let mockMissionRuntimeService = {
       id: 'crud',
       name: 'CRUD',
       suggested: true,
+      prerequisite: 'prerequisite text',
       description : 'sample desp',
       runtimes: [
       'vert.x',
@@ -38,6 +39,8 @@ let mockMissionRuntimeService = {
     let runtimes = Observable.of( [<Runtime> {
       'id': 'vert.x',
       'name': 'Eclipse Vert.x',
+      'suggested': true,
+      'prerequisite': 'prerequisite text',
       'description': 'Brief description of the technology...',
       /* stylelint-disable */
       'icon': "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 280'%3E%3Cpath fill='%23022B37' d='M107 170.8L67.7 72H46.9L100 204h13.9L167 72h-20.4zm64 33.2h80v-20h-61v-37h60v-19h-60V91h61V72h-80zm180.1-90.7c0-21-14.4-42.3-43.1-42.3h-48v133h19V91h29.1c16.1 0 24 11.1 24 22.4 0 11.5-7.9 22.6-24 22.6H286v9.6l48 58.4h24.7L317 154c22.6-4 34.1-22 34.1-40.7m56.4 90.7v-1c0-6 1.7-11.7 4.5-16.6V91h39V71h-99v20h41v113h14.5z'/%3E%3Cpath fill='%23623C94' d='M458 203c0-9.9-8.1-18-18-18s-18 8.1-18 18 8.1 18 18 18 18-8.1 18-18M577.4 72h-23.2l-27.5 37.8L499.1 72h-40.4c12.1 16 33.6 46.8 47.8 66.3l-37 50.9c2 4.2 3.1 8.9 3.1 13.8v1H499l95.2-132h-16.8zm-19.7 81.5l-20.1 27.9 16.5 22.6h40.2c-9.6-13.7-24-33.3-36.6-50.5z'/%3E%3C/svg%3E",
@@ -172,7 +175,7 @@ describe('MissionRuntimeStepComponent', () => {
   it('should have the suggested missions tag when mission.suggested field is true', () => {
     element = fixture.nativeElement;
     let missionsSection = element.querySelectorAll('.card-pf-body')[0];
-    let featuredTag = missionsSection.querySelector('.f8launcher-tag-featured');
+    let featuredTag = missionsSection.querySelector('.f8launcher-tags-label.suggested-tag');
     expect(featuredTag).toBeDefined();
   });
 
@@ -181,9 +184,43 @@ describe('MissionRuntimeStepComponent', () => {
     fixture.detectChanges();
     element = fixture.nativeElement;
     let missionsSection = element.querySelectorAll('.card-pf-body')[0];
-    let featuredTag = missionsSection.querySelector('.f8launcher-tag-featured');
+    let featuredTag = missionsSection.querySelector('.f8launcher-tags-label.suggested-tag');
     expect(featuredTag).toBeNull();
   });
+
+  it('should have the prerequisite missions tag when mission.prerequisite field is present', () => {
+    element = fixture.nativeElement;
+    let missionsSection = element.querySelectorAll('.card-pf-body')[0];
+    let featuredTag = missionsSection.querySelector('.f8launcher-tags-label.prerequisite');
+    expect(featuredTag).toBeDefined();
+  });
+
+  it('should not have the prerequisite missions tag when mission.prerequisite field is absent', () => {
+    delete component.missions[0].prerequisite;
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let missionsSection = element.querySelectorAll('.card-pf-body')[0];
+    let featuredTag = missionsSection.querySelector('.f8launcher-tags-label.prerequisite');
+    expect(featuredTag).toBeNull();
+  });
+
+
+
+  // it('should have the contribute missions tag when mission is enabled', () => {
+  //   element = fixture.nativeElement;
+  //   let missionsSection = element.querySelectorAll('.card-pf-body')[0];
+  //   let featuredTag = missionsSection.querySelector('.f8launcher-tags-label.contribute');
+  //   expect(featuredTag).toBeDefined();
+  // });
+
+  // it('should not have the contribute missions tag when mission is disabled', () => {
+  //   delete component.missions[0].contribute;
+  //   fixture.detectChanges();
+  //   element = fixture.nativeElement;
+  //   let missionsSection = element.querySelectorAll('.card-pf-body')[0];
+  //   let featuredTag = missionsSection.querySelector('.f8launcher-tags-label.contribute');
+  //   expect(featuredTag).toBeNull();
+  // });
 
   it('should have the mission name as specified', () => {
     element = fixture.nativeElement;
@@ -201,34 +238,38 @@ describe('MissionRuntimeStepComponent', () => {
     let missionHead = missionsSection.querySelectorAll('.list-group-item-text');
     let missions = component.missions, len = missions.length;
     for (let i = 0; i < len; ++ i) {
-      expect((<HTMLDivElement>missionHead[i]).innerText).toBe(missions[i].description);
+      expect((<HTMLDivElement>missionHead[i].children[0]).innerText).toBe(missions[i].description);
     }
   });
 
-  it('should show more if the url is present', () => {
-    component.missions[0].url = 'https://github.com/fabric8-launcher/ngx-launcher/';
+  it('should have the mission description truncated if the length is beyond 45 characters', () => {
+    let desc: string = 'this is a very lengthy description just to check the functionality of truncation';
+    component.missions[0].description = desc;
     fixture.detectChanges();
     element = fixture.nativeElement;
     let missionsSection = element.querySelectorAll('.card-pf-body')[0];
-    let showMore = missionsSection.querySelector('a');
-    expect(showMore).toBeDefined();
+    let missionHead = missionsSection.querySelectorAll('.list-group-item-text');
+    let missions = component.missions, len = missions.length;
+    for (let i = 0; i < len; ++ i) {
+      expect((<HTMLDivElement>missionHead[i].children[0]).innerText).toBe(desc.substr(0, 45) + '...');
+    }
   });
 
-  it('should have the mission.url as href', () => {
-    component.missions[0].url = 'https://github.com/fabric8-launcher/ngx-launcher/';
+  it('should show "Less" if the showMore is true - Missions', () => {
+    component.missions[0]['showMore'] = true;
     fixture.detectChanges();
     element = fixture.nativeElement;
     let missionsSection = element.querySelectorAll('.card-pf-body')[0];
-    let showMore = <HTMLAnchorElement>missionsSection.querySelector('a');
-    expect(showMore.href).toBe('https://github.com/fabric8-launcher/ngx-launcher/');
+    let showMore = <HTMLAnchorElement>missionsSection.querySelector('.description-more').children[0];
+    expect(showMore.innerText).toBe('Less');
   });
 
-  it('should not show more if the url is not present', () => {
+  it('should show "More" if the showMore is false - Missions', () => {
     fixture.detectChanges();
     element = fixture.nativeElement;
     let missionsSection = element.querySelectorAll('.card-pf-body')[0];
-    let showMore = missionsSection.querySelector('a');
-    expect(showMore).toBeNull();
+    let showMore = <HTMLAnchorElement>missionsSection.querySelector('.description-more').children[0];
+    expect(showMore.innerText).toBe('More');
   });
 
   it('should disable the runtimes, on click of mission, which aren\'t applicable', fakeAsync(() => {
@@ -291,18 +332,50 @@ describe('MissionRuntimeStepComponent', () => {
   it('should have the suggested runtimes tag when runtime.suggested field is true', () => {
     element = fixture.nativeElement;
     let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
-    let featuredTag = runtimesSection.querySelector('.f8launcher-tag-featured');
+    let featuredTag = runtimesSection.querySelector('.f8launcher-tags-label.suggested-tag');
     expect(featuredTag).toBeDefined();
   });
 
   it('should not have the suggested runtimes tag when runtime.suggested field is false', () => {
-    component.missions[0].suggested = false;
+    component.runtimes[0].suggested = false;
     fixture.detectChanges();
     element = fixture.nativeElement;
     let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
-    let featuredTag = runtimesSection.querySelector('.f8launcher-tag-featured');
+    let featuredTag = runtimesSection.querySelector('.f8launcher-tags-label.suggested-tag');
     expect(featuredTag).toBeNull();
   });
+
+  it('should have the prerequisite runtimes tag when runtime.prerequisite field is present', () => {
+    element = fixture.nativeElement;
+    let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
+    let featuredTag = runtimesSection.querySelector('.f8launcher-tags-label.prerequisite');
+    expect(featuredTag).toBeDefined();
+  });
+
+  it('should not have the prerequisite runtimes tag when runtime.prerequisite field is absent', () => {
+    delete component.runtimes[0].prerequisite;
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
+    let featuredTag = runtimesSection.querySelector('.f8launcher-tags-label.prerequisite');
+    expect(featuredTag).toBeNull();
+  });
+
+  // it('should have the contribute runtimes tag when runtime.contribute field is present', () => {
+  //   element = fixture.nativeElement;
+  //   let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
+  //   let featuredTag = runtimesSection.querySelector('.f8launcher-tags-label.contribute');
+  //   expect(featuredTag).toBeDefined();
+  // });
+
+  // it('should not have the contribute runtimes tag when runtime.contribute field is absent', () => {
+  //   delete component.runtimes[0].contribute;
+  //   fixture.detectChanges();
+  //   element = fixture.nativeElement;
+  //   let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
+  //   let featuredTag = runtimesSection.querySelector('.f8launcher-tags-label.contribute');
+  //   expect(featuredTag).toBeNull();
+  // });
 
   it('should have the runtime name as specified', () => {
     element = fixture.nativeElement;
@@ -310,7 +383,7 @@ describe('MissionRuntimeStepComponent', () => {
     let runtimesHead = runtimesSection.querySelectorAll('.list-group-item-heading');
     let runtimes = component.runtimes, len = runtimes.length;
     for (let i = 0; i < len; ++ i) {
-      expect((<HTMLDivElement>runtimesHead[i]).innerText).toBe(runtimes[i].name);
+      expect((<HTMLDivElement>runtimesHead[i]).childNodes[0].textContent.trim()).toBe(runtimes[i].name);
     }
   });
 
@@ -320,33 +393,37 @@ describe('MissionRuntimeStepComponent', () => {
     let runtimesHead = runtimesSection.querySelectorAll('.list-group-item-text');
     let runtimes = component.runtimes, len = runtimes.length;
     for (let i = 0; i < len; ++ i) {
-      expect((<HTMLDivElement>runtimesHead[i]).innerText).toBe(runtimes[i].description);
+      expect((<HTMLDivElement>runtimesHead[i].children[0]).innerText).toBe(runtimes[i].description);
     }
   });
 
-  it('should show more if the url is present', () => {
-    component.runtimes[0].url = 'https://github.com/fabric8-launcher/ngx-launcher/';
+  it('should have the runtime description truncated if the length is beyond 45 characters', () => {
+    let desc: string = 'this is a very lengthy description just to check the functionality of truncation';
+    component.runtimes[0].description = desc;
     fixture.detectChanges();
     element = fixture.nativeElement;
     let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
-    let showMore = runtimesSection.querySelector('a');
-    expect(showMore).toBeDefined();
+    let runtimesHead = runtimesSection.querySelectorAll('.list-group-item-text');
+    let runtimes = component.runtimes, len = runtimes.length;
+    for (let i = 0; i < len; ++ i) {
+      expect((<HTMLDivElement>runtimesHead[i].children[0]).innerText).toBe(desc.substr(0, 45) + '...');
+    }
   });
 
-  it('should have the runtime.url as href', () => {
-    component.runtimes[0].url = 'https://github.com/fabric8-launcher/ngx-launcher/';
+  it('should show "Less" if the showMore is true - Runtimes', () => {
+    component.runtimes[0]['showMore'] = true;
     fixture.detectChanges();
     element = fixture.nativeElement;
     let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
-    let showMore = <HTMLAnchorElement>runtimesSection.querySelector('a');
-    expect(showMore.href).toBe('https://github.com/fabric8-launcher/ngx-launcher/');
+    let showMore = <HTMLAnchorElement>runtimesSection.querySelector('.description-more').children[0];
+    expect(showMore.innerText).toBe('Less');
   });
 
-  it('should not show more if the url is not present', () => {
+  it('should show "More" if the showMore is false - Runtimes', () => {
     fixture.detectChanges();
     element = fixture.nativeElement;
     let runtimesSection = element.querySelectorAll('.card-pf-body')[1];
-    let showMore = runtimesSection.querySelector('a');
-    expect(showMore).toBeNull();
+    let showMore = <HTMLAnchorElement>runtimesSection.querySelector('.description-more').children[0];
+    expect(showMore.innerText).toBe('More');
   });
 });
