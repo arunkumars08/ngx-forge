@@ -122,6 +122,7 @@ describe('MissionRuntimeStepComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(MissionRuntimeCreateappStepComponent);
     component = fixture.componentInstance;
+    // component.ngOnInit();
     fixture.detectChanges();
   });
 
@@ -130,10 +131,6 @@ describe('MissionRuntimeStepComponent', () => {
   });
 
   // Missions tests
-  beforeEach(() => {
-    component.ngOnInit();
-    fixture.detectChanges();
-  });
 
   it('to have count of missions to be 1', () => {
     let missionsList = component.missions;
