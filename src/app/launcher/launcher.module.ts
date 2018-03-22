@@ -2,7 +2,7 @@ import { NgModule, Provider } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-// import { DependencyEditorModule } from 'fabric8-analytics-dep-editor';
+import { DependencyEditorModule } from 'fabric8-analytics-dep-editor';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 
@@ -54,6 +54,7 @@ export const providers: Provider[] = [
   imports: [
     BsDropdownModule.forRoot(),
     CommonModule,
+    DependencyEditorModule,
     FormsModule,
     InViewportModule.forRoot(providers),
     PipeModule,

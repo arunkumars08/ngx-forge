@@ -2,6 +2,7 @@ import {
     Component,
     Host,
     Input,
+    OnInit,
     OnDestroy,
     ViewEncapsulation
   } from '@angular/core';
@@ -22,7 +23,7 @@ import {
     templateUrl: './dependency-editor-step.component.html',
     styleUrls: ['./dependency-editor-step.component.less']
   })
-  export class DependencyEditorCreateappStepComponent extends LauncherStep implements OnDestroy {
+  export class DependencyEditorCreateappStepComponent extends LauncherStep implements OnInit, OnDestroy {
     @Input() id: string;
 
     public github: string = '';

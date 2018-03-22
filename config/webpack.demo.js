@@ -19,6 +19,7 @@ const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplaceme
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const TsConfigPathsPlugin = require('awesome-typescript-loader').TsConfigPathsPlugin;
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 // ExtractTextPlugin
 const extractCSS = new ExtractTextPlugin({
@@ -206,10 +207,10 @@ module.exports = {
      *
      * See: https://www.npmjs.com/package/@ngtools/webpack
      */
-    new AotPlugin({
-      entryModule: helpers.root('src/demo/app.module.ts#AppModule'),
-      tsConfigPath: helpers.root('tsconfig-aot.json')
-    }),
+    // new AotPlugin({
+    //   entryModule: helpers.root('src/demo/app.module.ts#AppModule'),
+    //   tsConfigPath: helpers.root('tsconfig-aot.json')
+    // }),
 
     /**
      * Plugin: copy-webpack-plugin
