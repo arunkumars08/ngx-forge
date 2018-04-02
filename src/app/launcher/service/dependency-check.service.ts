@@ -12,4 +12,6 @@ export abstract class DependencyCheckService {
    * @returns {Observable<DependencyCheck>} Project dependencies
    */
   abstract getDependencyCheck(): Observable<DependencyCheck>;
+
+  abstract getBoosterInfo(missionId: string, runtimeId: string): Observable<string>;
 }
