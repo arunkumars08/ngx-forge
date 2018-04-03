@@ -32,6 +32,7 @@ import { FABRIC8_ORIGIN } from './shared/forge-origin';
 
 import { TokenProvider } from '../app/service/token-provider';
 import { MockAuthenticationService } from './shared/mock-auth.service';
+import { AnalyticsUrlService } from './shared/analytics-url.service';
 
 import { HelperService } from '../app/launcher/service/helper.service';
 
@@ -75,7 +76,8 @@ import {
     { provide: Config, useClass: ForgeConfig },
     { provide: FABRIC8_FORGE_API_URL, useValue: 'https://forge.api.prod-preview.openshift.io' },
     { provide: FABRIC8_ORIGIN, useValue: 'osio' },
-    { provide: TokenProvider, useClass: MockAuthenticationService }
+    { provide: TokenProvider, useClass: MockAuthenticationService },
+    AnalyticsUrlService
   ],
   bootstrap: [AppComponent]
 })
