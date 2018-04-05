@@ -42,10 +42,10 @@ export class ProjectSummaryCreateappStepComponent extends LauncherStep implement
     this.launcherComponent.addStep(this);
     this.restoreSummary();
 
-    this.subscriptions.push(this.dependencyCheckService.getDependencyCheck().subscribe((val) => {
-      // Don't override user's application name
-      defaults(this.launcherComponent.summary.dependencyCheck, val);
-    }));
+    // this.subscriptions.push(this.dependencyCheckService.getDependencyCheck().subscribe((val) => {
+    //   // Don't override user's application name
+    //   defaults(this.launcherComponent.summary.dependencyCheck, val);
+    // }));
     this.subscriptions.push(
       this.projectSummaryService.getCurrentContext()
         .subscribe((response: any) => {
