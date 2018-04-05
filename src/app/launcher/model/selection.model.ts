@@ -1,3 +1,4 @@
+import { DependencyCheck } from './dependency-check.model';
 export class Selection {
   groupId?: string;
   missionId?: string;
@@ -11,4 +12,5 @@ export class Selection {
   };
   spacePath?: string;
   targetEnvironment?: string;
+  dependencyCheck: DependencyCheck;
 }
