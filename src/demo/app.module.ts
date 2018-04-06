@@ -5,6 +5,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import { DependencyEditorTokenProvider, URLProvider } from 'fabric8-analytics-dep-editor';
+
 // App components
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -77,7 +79,8 @@ import {
     { provide: FABRIC8_FORGE_API_URL, useValue: 'https://forge.api.prod-preview.openshift.io' },
     { provide: FABRIC8_ORIGIN, useValue: 'osio' },
     { provide: TokenProvider, useClass: MockAuthenticationService },
-    AnalyticsUrlService
+    { provide: DependencyEditorTokenProvider, useExisting: TokenProvider },
+    { provide: URLProvider, useClass: AnalyticsUrlService }
   ],
   bootstrap: [AppComponent]
 })
