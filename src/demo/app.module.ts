@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { DependencyEditorTokenProvider, URLProvider } from 'fabric8-analytics-dep-editor';
+import { DependencyEditorTokenProvider, URLProvider } from 'fabric8-analytics-dependency-editor';
 
 // App components
 import { AppComponent } from './app.component';
@@ -20,6 +20,7 @@ import { ImportAppComponent } from './import-app/import-app.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 
 import { DemoDependencyCheckService } from './service/demo-dependency-check.service';
+import { DemoDependencyEditorService } from './service/demo-dependency-editor.service';
 import { DemoGitProviderService } from './service/demo-git-provider.service';
 import { DemoMissionRuntimeService } from './service/demo-mission-runtime.service';
 import { DemoPipelineService } from './service/demo-pipeline.service';
@@ -40,6 +41,7 @@ import { HelperService } from '../app/launcher/service/helper.service';
 
 import {
   DependencyCheckService,
+  DependencyEditorService,
   GitProviderService,
   LauncherModule,
   MissionRuntimeService,
@@ -69,6 +71,7 @@ import {
   providers: [
     HelperService,
     { provide: DependencyCheckService, useClass: DemoDependencyCheckService},
+    { provide: DependencyEditorService, useClass: DemoDependencyEditorService},
     { provide: GitProviderService, useClass: DemoGitProviderService},
     { provide: MissionRuntimeService, useClass: DemoMissionRuntimeService },
     { provide: PipelineService, useClass: DemoPipelineService },

@@ -2,7 +2,7 @@ import { NgModule, Provider } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { DependencyEditorModule } from 'fabric8-analytics-dep-editor';
+import { DependencyEditorModule,  URLProvider, DependencyEditorTokenProvider } from 'fabric8-analytics-dependency-editor';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -103,6 +103,7 @@ export { TargetEnvironment } from './model/target-environment.model';
 
 // Services
 export { ClusterService } from './service/cluster.service';
+export { DependencyEditorService } from './service/dependency-editor.service';
 export { DependencyCheckService } from './service/dependency-check.service';
 export { GitProviderService } from './service/git-provider.service';
 export { MissionRuntimeService } from './service/mission-runtime.service';
@@ -114,3 +115,5 @@ export { TargetEnvironmentService } from './service/target-environment.service';
 
 // Utility Service
 export { HelperService } from './service/helper.service';
+
+export { DependencyEditorModule,  URLProvider, DependencyEditorTokenProvider };
