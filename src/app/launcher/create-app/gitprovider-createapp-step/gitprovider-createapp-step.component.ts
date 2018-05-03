@@ -127,7 +127,7 @@ export class GitproviderCreateappStepComponent extends LauncherStep implements A
     let org = '';
     if (this.launcherComponent && this.launcherComponent.summary &&
       this.launcherComponent.summary.gitHubDetails) {
-        if(this.launcherComponent.summary.dependencyCheck.projectName) {
+        if (this.launcherComponent.summary.dependencyCheck.projectName) {
           this.launcherComponent.summary.dependencyCheck.projectName = this.launcherComponent.summary.dependencyCheck.projectName.toLowerCase();
         }
       org = this.launcherComponent.summary.gitHubDetails.organization;
