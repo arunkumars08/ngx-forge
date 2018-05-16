@@ -183,7 +183,16 @@ gulp.task('copy-watch-all', ['build:library'], function () {
   return updateWatchDist();
 });
 
-gulp.task('watch', ['copy-watch-all'], function () {
+function copyNode(packageName) {
+  return gulp .src(['node_modules/' + packageName + '/**/*'])
+              .pipe(gulp.dest(watchDist + '/node_modules/' + packageName));
+}
+
+gulp.task('copy-dependency-editor-node-module', function() {
+  return copyNode('fabric8-analytics-dependency-editor');
+});
+
+gulp.task('watch', ['copy-watch-all', 'copy-dependency-editor-node-module'], function () {
   gulp.watch([appSrc + '/app/**/*.ts', '!' + appSrc + '/app/**/*.spec.ts']).on('change', function (e) {
     util.log(util.colors.cyan(e.path) + ' has been changed. Compiling.');
     runSequence(
